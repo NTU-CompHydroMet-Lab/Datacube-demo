@@ -1,0 +1,16 @@
+name: s2_landcover_taiwan
+description: Sentinel-2-derived 10 m annual land-use/land-cover classification raster for Taiwan.
+metadata_type: eo3
+
+metadata:
+  product:
+    name: s2_landcover_taiwan
+
+measurements:
+  - name: classification
+    aliases:
+      - land_cover
+      - lulc
+    dtype: uint8
+    nodata: 0
+    units: "1"
