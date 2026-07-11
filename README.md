@@ -1,9 +1,10 @@
 # Datacube-demo
 
-Tutorials for cross-datacube analysis: Google Earth Engine (GEE) and Open Data Cube (ODC).
+Tutorials for cross-datacube analysis: Google Earth Engine (GEE), Open Data Cube (ODC), and Rasdaman.
 
-跨數據立方分析教學：涵蓋 Google Earth Engine（Google 代管之雲端資料立方）與
-Open Data Cube（自建之開源資料立方），以相同案例呈現兩種代表性架構之使用方式。
+跨數據立方分析教學：涵蓋 Google Earth Engine（Google 代管之雲端資料立方）、
+Open Data Cube（自建之開源索引式資料立方）與 Rasdaman（自建之開源陣列資料庫立方），
+呈現雲端與自建等代表性架構之使用方式。
 
 ## GEE Tutorials
 
@@ -33,3 +34,12 @@ Open Data Cube（自建之開源資料立方），以相同案例呈現兩種代
 
 前端介面即建構於此部署之上；學研團隊亦可以同一套部署自建正式分析環境。
 操作說明見 [`ODC/odc_local_demo/README.md`](ODC/odc_local_demo/README.md)。
+
+## Rasdaman
+
+以 rootless Podman 部署之自建陣列資料庫（array DBMS）資料立方，透過 Petascope 對外提供 OGC 標準服務（WCS / WCPS / WMS）。相較於 ODC 之索引式資料立方，Rasdaman 以陣列資料庫為核心，適合需原生 OGC 服務與伺服端陣列運算之場景。
+
+| 內容 | 開啟 | 說明 |
+| --- | --- | --- |
+| 部署標準作業流程 (SOP) | [`Rasdaman/`](Rasdaman/) | 容器化建置、資料匯入（wcst_import）、驗證與備份之逐步流程 |
+| WCS/WCPS 互動 notebook | [`Rasdaman/notebooks/`](Rasdaman/notebooks/) | 列出 coverage、WCPS 聚合、2D 影像化與 3D 時間序列切片 |
