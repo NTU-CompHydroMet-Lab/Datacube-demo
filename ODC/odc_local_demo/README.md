@@ -294,3 +294,22 @@ Then rebuild the index:
 docker compose exec odc bash /workspace/scripts/reset_odc_demo.sh
 docker compose exec odc python /workspace/scripts/check_odc_demo.py
 ```
+
+## Web Map Interface (一般使用者操作說明)
+
+部署完成後，以瀏覽器開啟：
+
+```text
+http://localhost:8000
+```
+
+網頁地圖介面無須撰寫任何程式，操作方式如下：
+
+- **Year**：下拉選單切換年度，地圖圖層與統計即時更新；
+- **Classes**：勾選／取消各土地覆蓋類別（水體、樹林、農作、建成區等），
+  控制地圖上顯示之圖層內容；
+- **Area Summary**：顯示目前年度、目前勾選類別之面積統計；
+- **地圖**：可縮放、平移；土地覆蓋圖層由後端自 ODC 索引即時渲染。
+
+此介面與 notebook 教學使用同一個 ODC 索引：notebook 供資料科學家／學研團隊
+以 Python API 進行客製分析；網頁介面則供一般使用者直接查閱成果。
