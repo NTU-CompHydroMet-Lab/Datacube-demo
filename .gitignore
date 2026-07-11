@@ -1,0 +1,9 @@
+# Local Earth Engine service account keys
+GEE/*.json
+.gitignore
+# Jupyter transient files
+.ipynb_checkpoints/
+
+# Generated local demo data and Python caches
+ODC/odc_local_demo/datasets/
+__pycache__/
