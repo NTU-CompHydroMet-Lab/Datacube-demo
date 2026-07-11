@@ -1,0 +1,74 @@
+{
+  "config": {
+    "service_url": "http://localhost:8080/rasdaman/ows",
+    "tmp_directory": "/tmp/rasdaman",
+    "crs_resolver": "http://localhost:8080/rasdaman/def",
+    "default_crs": "http://localhost:8080/rasdaman/def/crs/EPSG/0/4326",
+    "mock": false,
+    "automated": true,
+    "track_files": false,
+    "insitu": true
+  },
+  "input": {
+    "coverage_id": "qpesums_maxdbz_demo",
+    "paths": [
+      "/tmp/qpesums_orig/*.nc"
+    ]
+  },
+  "recipe": {
+    "name": "general_coverage",
+    "options": {
+      "import_order": "ascending",
+      "tiling": "ALIGNED [0:*, 0:*, 0:*] tile size 4194304",
+      "coverage": {
+        "crs": "OGC/0/AnsiDate?axis-label=\"ansi\"@EPSG/0/4326",
+        "metadata": {
+          "type": "xml",
+          "bands": {
+            "dataset1": {
+              "long_name": "QPESUMS max reflectivity (MAXDBZ)",
+              "uomCode": "dBZ"
+            }
+          }
+        },
+        "slicer": {
+          "type": "netcdf",
+          "pixelIsPoint": true,
+          "bands": [
+            {
+              "identifier": "dataset1",
+              "name": "dataset1",
+              "description": "max reflectivity",
+              "uomCode": "dBZ"
+            }
+          ],
+          "axes": {
+            "ansi": {
+              "min": "datetime(regex_extract('${file:name}', 'MREF3D21L\\.(\\d{8})\\.(\\d{4}).*', 1) + 'T' + regex_extract('${file:name}', 'MREF3D21L\\.(\\d{8})\\.(\\d{4}).*', 2), 'YYYYMMDDTHHmm')",
+              "gridOrder": 0,
+              "crsOrder": 0,
+              "type": "ansidate",
+              "irregular": true,
+              "resolution": 1,
+              "dataBound": false
+            },
+            "y": {
+              "min": "20",
+              "max": "27",
+              "resolution": "-0.0125",
+              "gridOrder": 1,
+              "crsOrder": 1
+            },
+            "x": {
+              "min": "118",
+              "max": "123.5",
+              "resolution": "0.0125",
+              "gridOrder": 2,
+              "crsOrder": 2
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+# Python 環境：與 rasdaman / Petascope 互動所需套件
+jupyterlab>=4.0
+requests>=2.31
+numpy>=1.26
+matplotlib>=3.8
+lxml>=5.0
+Pillow>=10.0

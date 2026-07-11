@@ -1,0 +1,75 @@
+{
+  "config": {
+    "service_url": "http://localhost:8080/rasdaman/ows",
+    "tmp_directory": "/tmp/rasdaman",
+    "crs_resolver": "http://localhost:8080/rasdaman/def",
+    "default_crs": "http://localhost:8080/rasdaman/def/crs/EPSG/0/4326",
+    "mock": false,
+    "automated": true,
+    "track_files": false,
+    "insitu": true
+  },
+  "input": {
+    "coverage_id": "era5_tp_tw_demo",
+    "paths": [
+      "/tmp/era5/tp_tw_small.nc"
+    ]
+  },
+  "recipe": {
+    "name": "general_coverage",
+    "options": {
+      "import_order": "ascending",
+      "tiling": "ALIGNED [0:*, 0:*, 0:*] tile size 4194304",
+      "coverage": {
+        "crs": "OGC/0/AnsiDate?axis-label=\"ansi\"@EPSG/0/4326",
+        "metadata": {
+          "type": "xml",
+          "bands": {
+            "tp": {
+              "long_name": "ERA5 total precipitation",
+              "uomCode": "m"
+            }
+          }
+        },
+        "slicer": {
+          "type": "netcdf",
+          "pixelIsPoint": true,
+          "bands": [
+            {
+              "identifier": "tp",
+              "name": "tp",
+              "description": "total precipitation",
+              "uomCode": "m"
+            }
+          ],
+          "axes": {
+            "ansi": {
+              "min": "${netcdf:variable:valid_time:min}",
+              "max": "${netcdf:variable:valid_time:max}",
+              "directPositions": "${netcdf:variable:valid_time}",
+              "gridOrder": 0,
+              "crsOrder": 0,
+              "type": "ansidate",
+              "irregular": true,
+              "resolution": 1
+            },
+            "y": {
+              "min": "${netcdf:variable:latitude:min}",
+              "max": "${netcdf:variable:latitude:max}",
+              "resolution": "-0.25",
+              "gridOrder": 1,
+              "crsOrder": 1
+            },
+            "x": {
+              "min": "${netcdf:variable:longitude:min}",
+              "max": "${netcdf:variable:longitude:max}",
+              "resolution": "0.25",
+              "gridOrder": 2,
+              "crsOrder": 2
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "config": {
+    "service_url": "http://localhost:8080/rasdaman/ows",
+    "tmp_directory": "/tmp/",
+    "crs_resolver": "http://localhost:8080/rasdaman/def/",
+    "mock": false,
+    "automated": true
+  },
+  "input": {
+    "coverage_id": "mr_demo",
+    "paths": [
+      "/tmp/geo_mr.tif"
+    ]
+  },
+  "recipe": {
+    "name": "general_coverage",
+    "options": {
+      "coverage": {
+        "crs": "http://localhost:8080/rasdaman/def/crs/EPSG/0/4326",
+        "slicer": {
+          "type": "gdal",
+          "bands": [
+            { "name": "Gray", "identifier": "Gray" }
+          ],
+          "axes": {
+            "Lat": {
+              "min": "${gdal:minY}",
+              "max": "${gdal:maxY}",
+              "resolution": "${gdal:resolutionY}",
+              "gridOrder": 0
+            },
+            "Long": {
+              "min": "${gdal:minX}",
+              "max": "${gdal:maxX}",
+              "resolution": "${gdal:resolutionX}",
+              "gridOrder": 1
+            }
+          }
+        }
+      },
+      "tiling": "ALIGNED [0:1023, 0:1023] TILE SIZE 4194304"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "config": {
+    "service_url": "PETASCOPE_URL",
+    "tmp_directory": "/tmp/",
+    "crs_resolver": "SECORE_URL",
+    "default_crs": "SECORE_URL/crs/EPSG/0/4326",
+    "mock": false,
+    "automated": true,
+    "track_files": false
+  },
+  "input": {
+    "coverage_id": "mean_summer_airtemp",
+    "paths": [
+      "DATA_FOLDER_PATH/mean_summer_airtemp.tif"
+    ]
+  },
+  "recipe": {
+    "name": "map_mosaic",
+    "options": {
+      "tiling": "ALIGNED [0:1000, 0:1000]",
+      "wms_import": true,
+      "band_names": ["Gray"]
+    }
+  }
+}
