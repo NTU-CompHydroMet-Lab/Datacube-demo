@@ -164,4 +164,4 @@ var lightMask = annualMean.gt(1);
 
 如果想看到更多微弱燈光，可以把門檻調低。
 
-![初始畫面](image-5.png)
+
