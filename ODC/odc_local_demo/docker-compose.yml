@@ -1,7 +1,8 @@
 services:
   postgres:
-    image: postgres:15
-    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
     environment:
       POSTGRES_DB: datacube
       POSTGRES_USER: datacube
@@ -37,6 +38,25 @@ services:
       - ../notebooks:/workspace/notebooks
     working_dir: /workspace
     command: ["bash", "-lc", "sleep infinity"]
+
+  frontend:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOSTNAME: postgres
+      DB_DATABASE: datacube
+      DB_USERNAME: datacube
+      DB_PASSWORD: datacube
+      DATACUBE_CONFIG_PATH: /root/.datacube.conf
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/workspace/data
+      - ./frontend:/workspace/frontend
+    working_dir: /workspace
+    command: ["bash", "-lc", "uvicorn frontend.app.main:app --host 0.0.0.0 --port 8000"]
 
 volumes:
   odc_postgres_data:

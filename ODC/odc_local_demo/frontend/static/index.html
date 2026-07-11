@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ODC Land-Cover Demo</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark"></div>
+          <div>
+            <h1>Taiwan Land Cover</h1>
+            <p>ODC + Leaflet demo</p>
+          </div>
+        </div>
+
+        <section class="control-group">
+          <label for="yearSelect">Year</label>
+          <select id="yearSelect"></select>
+        </section>
+
+        <section class="control-group">
+          <div class="section-title">Classes</div>
+          <div id="classList" class="class-list"></div>
+        </section>
+
+        <section class="control-group stats-panel">
+          <div class="section-title">Area Summary</div>
+          <div id="statsList" class="stats-list"></div>
+        </section>
+      </aside>
+
+      <section class="map-panel">
+        <div id="map"></div>
+        <div id="status" class="status">Loading...</div>
+      </section>
+    </main>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
