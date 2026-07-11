@@ -83,7 +83,7 @@ docker compose exec odc python /workspace/scripts/check_odc_demo.py
 ODC demo check passed.
 ```
 
-如果你在 Windows 使用 Git Bash，傳入 Linux container 路徑時需要關閉 MSYS path conversion：
+在 Windows 使用 Git Bash 時，傳入 Linux container 路徑需要關閉 MSYS path conversion：
 
 ```bash
 MSYS_NO_PATHCONV=1 docker compose exec odc bash /workspace/scripts/setup_odc_demo.sh
@@ -135,6 +135,18 @@ http://localhost:8000
 - 面積統計 API
 - 固定的大台北範圍 bounding box
 
+### 操作說明（一般使用者）
+
+此介面無須撰寫任何程式，操作方式如下：
+
+- **Year**：下拉選單切換年度，地圖圖層與統計即時更新；
+- **Classes**：勾選／取消各土地覆蓋類別（水體、樹林、農作、建成區等），控制地圖顯示內容；
+- **Area Summary**：顯示目前年度、目前勾選類別的面積統計；
+- **地圖**：可縮放、平移；圖層由後端自 ODC 索引即時渲染。
+
+此介面與 notebook 教學使用同一個 ODC 索引：notebook 供資料科學家／學研團隊
+以 Python API 進行客製分析；網頁介面則供一般使用者直接查閱成果。
+
 ## 開啟 Jupyter
 
 在 `odc` container 內啟動 Jupyter Lab：
@@ -183,7 +195,7 @@ docker compose exec odc jupyter lab --ip=0.0.0.0 --port=8888 --allow-root --no-b
 
 ## 重新建立 ODC 索引
 
-如果你更換了 `data/` 內的 GeoTIFF、修改 product definition，或修改 `scripts/write_dataset_yaml.py`，但想保留現有 container 與 PostgreSQL volume，可以執行：
+如果更換了 `data/` 內的 GeoTIFF、修改 product definition，或修改 `scripts/write_dataset_yaml.py`，但欲保留現有 container 與 PostgreSQL volume，可以執行：
 
 ```bash
 docker compose exec odc bash /workspace/scripts/reset_odc_demo.sh
@@ -199,7 +211,7 @@ MSYS_NO_PATHCONV=1 docker compose exec odc python /workspace/scripts/check_odc_d
 
 ## 完全重設
 
-如果你想刪除 demo 的 PostgreSQL volume，並從零重建 ODC database：
+如果要刪除 demo 的 PostgreSQL volume，並從零重建 ODC database：
 
 ```bash
 docker compose down -v
@@ -208,7 +220,7 @@ docker compose exec odc bash /workspace/scripts/setup_odc_demo.sh
 docker compose exec odc python /workspace/scripts/check_odc_demo.py
 ```
 
-這只會刪除已索引的 ODC database volume，不會刪除你的 GeoTIFF、product YAML、scripts、frontend、產生出的 dataset YAML 或 notebooks。
+這只會刪除已索引的 ODC database volume，不會刪除 GeoTIFF、product YAML、scripts、frontend、產生出的 dataset YAML 或 notebooks。
 
 ## 結束 demo
 

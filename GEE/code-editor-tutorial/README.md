@@ -1,7 +1,10 @@
 # GEE Code Editor 教學：台灣 VIIRS 夜間燈光
 
-這份教學示範如何在 Google Earth Engine 官方 Code Editor 平台，用
-JavaScript 重現 notebook 中的 VIIRS 夜間燈光範例。
+本教學說明如何在 Google Earth Engine 官方 Code Editor 平台，以
+JavaScript 重現 notebook（[`GEE/GEE.ipynb`](../GEE.ipynb)）中的 VIIRS 夜間燈光範例。
+
+Code Editor 為 GEE 原生的網頁開發介面，無須安裝任何環境，適合快速試驗與參數調整；
+notebook 版本則適合與 Python 資料處理流程整合。兩者呼叫相同的後端運算。
 
 範例程式碼：
 
@@ -25,7 +28,7 @@ https://code.earthengine.google.com/b7e3a1999822da32ab31169fb049dc20
 
 ![Google Earth Engine 初始畫面](image-5.png)
 
-第一次進入或切換 workspace 時，系統可能會要求選擇 Cloud Project。選擇你要綁定的專案後，按下 `SELECT`。
+第一次進入或切換 workspace 時，系統可能會要求選擇 Cloud Project。選擇欲綁定的專案後，按下 `SELECT`。
 
 ![選擇 Cloud Project](image.png)
 
@@ -42,13 +45,13 @@ https://code.earthengine.google.com/b7e3a1999822da32ab31169fb049dc20
 
 ## 3. 最簡化方法：直接開啟範例 Script
 
-如果只是要最快開始使用，可以直接打開以下連結：
+最快的開始方式是直接開啟以下連結：
 
 ```text
 https://code.earthengine.google.com/b7e3a1999822da32ab31169fb049dc20
 ```
 
-或直接點這裡：
+或由以下連結開啟：
 
 [開啟 GEE 範例 script](https://code.earthengine.google.com/b7e3a1999822da32ab31169fb049dc20)
 
@@ -95,7 +98,7 @@ viirs_night_lights_taiwan
 
 ## 7. 查看 Console 輸出
 
-執行後，右側切到 `Console`。你應該會看到兩個輸出：
+執行後，右側切到 `Console`，應可看到兩個輸出：
 
 - `VIIRS collection after filtering`：篩選後的 VIIRS ImageCollection。
 - `Annual mean night lights image`：年度平均後的單張影像。
@@ -108,7 +111,7 @@ viirs_night_lights_taiwan
 
 地圖會自動移動到台灣附近，並顯示 2023 年平均夜間燈光。
 
-顏色越亮，代表夜間燈光強度越高。通常可以看到西部都會區、主要城市、港口和交通廊帶比較明顯。
+顏色越亮，代表夜間燈光強度越高。西部都會區、主要城市、港口與交通廊帶通常較為明顯。
 
 ![台灣 VIIRS 夜間燈光結果](image-4.png)
 
@@ -156,11 +159,17 @@ var nightLightsVis = {
 var lightMask = annualMean.gt(0.1);
 ```
 
-如果想只保留更亮的區域，可以把 `0.1` 調高，例如：
+若只欲保留較亮的區域，可將 `0.1` 調高，例如：
 
 ```js
 var lightMask = annualMean.gt(1);
 ```
 
-如果想看到更多微弱燈光，可以把門檻調低。
+若欲呈現更多微弱燈光，則將門檻調低。
+
+## 12. 匯出結果（選擇性）
+
+程式碼結尾包含一段預設為註解的匯出區塊。若需將影像匯出至 Google Drive，
+移除 `Export.image.toDrive(...)` 周圍的註解後重新執行，
+再於右側 `Tasks` 分頁啟動匯出任務；完成後檔案將出現在 Google Drive。
 
