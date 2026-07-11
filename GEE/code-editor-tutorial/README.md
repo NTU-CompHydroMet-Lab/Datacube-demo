@@ -16,7 +16,7 @@ JavaScript 重現 notebook 中的 VIIRS 夜間燈光範例。
 進入 Google Earth Engine Code Editor：
 
 ```text
-https://code.earthengine.google.com/
+https://code.earthengine.google.com/b7e3a1999822da32ab31169fb049dc20
 ```
 
 請使用已啟用 Earth Engine 權限的 Google 帳號登入。
@@ -40,19 +40,19 @@ https://code.earthengine.google.com/
 
 ![Code Editor 主畫面](image-1.png)
 
-## 3. 最簡化方法：直接接受 GEE Repo
+## 3. 最簡化方法：直接開啟範例 Script
 
 如果只是要最快開始使用，可以直接打開以下連結：
 
 ```text
-https://code.earthengine.google.com/?accept_repo=users/chenj6677/GEE
+https://code.earthengine.google.com/b7e3a1999822da32ab31169fb049dc20
 ```
 
 或直接點這裡：
 
-[開啟並接受 GEE repo](https://code.earthengine.google.com/?accept_repo=users/chenj6677/GEE)
+[開啟 GEE 範例 script](https://code.earthengine.google.com/b7e3a1999822da32ab31169fb049dc20)
 
-進入頁面後，依照 GEE 畫面提示接受 repo。完成後，左側 `Scripts` 區域會出現 `users/chenj6677/GEE`，接著打開範例 script，按上方 `Run` 即可執行。
+進入頁面後，會直接開啟範例 script。確認程式碼載入後，按上方 `Run` 即可執行。
 
 如果這個連結無法使用，或想手動練習 Code Editor 操作，再依照下一步建立新 script 並貼上程式碼。
 
@@ -163,5 +163,4 @@ var lightMask = annualMean.gt(1);
 ```
 
 如果想看到更多微弱燈光，可以把門檻調低。
-
 
