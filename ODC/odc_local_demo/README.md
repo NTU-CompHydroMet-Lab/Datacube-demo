@@ -1,40 +1,36 @@
-# ODC Local Demo
+# ODC 本機示範環境
 
-This project is a local Docker Compose demo for indexing Sentinel-2-derived
-Taiwan land-use/land-cover GeoTIFF files into Open Data Cube (ODC), then viewing
-the indexed data through a small FastAPI + Leaflet web map.
+這個專案是一個使用 Docker Compose 建立的 Open Data Cube (ODC) 本機示範環境。它會把 Sentinel-2 衍生的台灣土地利用/土地覆蓋 GeoTIFF 檔案索引到 ODC，並提供一個簡單的 FastAPI + Leaflet 網頁地圖來瀏覽資料。
 
-The demo is intended for local development and teaching. It runs three services:
+這個 demo 適合本機開發、教學與流程測試。它包含三個服務：
 
-- `postgres`: local PostgreSQL database for ODC metadata
-- `odc`: Open Data Cube command-line and Jupyter runtime
-- `frontend`: FastAPI service that renders map overlays from ODC
+- `postgres`：儲存 ODC metadata 的本機 PostgreSQL 資料庫
+- `odc`：執行 ODC 指令、Python 腳本與 Jupyter 的環境
+- `frontend`：提供 Leaflet 網頁地圖與 API 的 FastAPI 服務
 
-## Prerequisites
+## 前置需求
 
-- Docker Desktop installed and running
-- Docker Desktop using Linux containers
-- A terminal in this repository, preferably PowerShell on Windows
-- One or more GeoTIFF files in `ODC/odc_local_demo/data/`
+- 已安裝並啟動 Docker Desktop
+- Docker Desktop 使用 Linux containers
+- 在此 repository 內開啟終端機，Windows 建議使用 PowerShell
+- `ODC/odc_local_demo/data/` 內至少有一個 GeoTIFF 檔案
 
-The expected raster filename pattern is:
+GeoTIFF 檔名必須符合以下格式：
 
 ```text
 <label>_YYYYMMDD-YYYYMMDD.tif
 ```
 
-Examples:
+範例：
 
 ```text
 51R_20170101-20180101.tif
 51R_20180101-20190101.tif
 ```
 
-The setup script reads `data/*.tif`, creates ODC dataset YAML files in
-`datasets/`, adds the `s2_landcover_taiwan` product, and indexes the generated
-datasets.
+初始化腳本會讀取 `data/*.tif`，在 `datasets/` 產生 ODC dataset YAML，加入 `s2_landcover_taiwan` product，並把資料索引進 ODC。
 
-## Project Layout
+## 專案結構
 
 ```text
 project_root/
@@ -60,23 +56,19 @@ project_root/
 |       `-- 01_odc_load_demo.ipynb
 ```
 
-## Docker Files
+## Dockerfile 說明
 
-Both Dockerfiles are required.
+這個 demo 需要兩個 Dockerfile，請不要刪除其中任何一個。
 
 ```text
-Dockerfile           ODC, Python, Jupyter, FastAPI, GDAL, and raster tools
-Dockerfile.postgres  Local PostgreSQL image used by the postgres service
+Dockerfile           ODC、Python、Jupyter、FastAPI、GDAL 與 raster 工具
+Dockerfile.postgres  postgres service 使用的本機 PostgreSQL image
 ```
 
-`Dockerfile.postgres` exists to avoid pulling the official `postgres:15` image.
-Some networks can fail while downloading Docker Hub layers through CloudFront
-with an `EOF` error. This demo instead builds PostgreSQL locally from the same
-`python:3.11-slim` base image used by the ODC service.
 
-## Quick Start
+## 開始啟用
 
-From the repository root:
+請從 repository root 執行：
 
 ```bash
 cd ODC/odc_local_demo
@@ -85,29 +77,28 @@ docker compose exec odc bash /workspace/scripts/setup_odc_demo.sh
 docker compose exec odc python /workspace/scripts/check_odc_demo.py
 ```
 
-Expected final output:
+最後如果看到以下訊息，代表 ODC product、dataset indexing 與資料讀取測試成功：
 
 ```text
 ODC demo check passed.
 ```
 
-If you are using Git Bash on Windows, disable MSYS path conversion for commands
-that pass Linux container paths:
+如果你在 Windows 使用 Git Bash，傳入 Linux container 路徑時需要關閉 MSYS path conversion：
 
 ```bash
 MSYS_NO_PATHCONV=1 docker compose exec odc bash /workspace/scripts/setup_odc_demo.sh
 MSYS_NO_PATHCONV=1 docker compose exec odc python /workspace/scripts/check_odc_demo.py
 ```
 
-## Verify Services
+## 確認服務狀態
 
-Check that all services are running:
+檢查三個服務是否都正常執行：
 
 ```bash
 docker compose ps
 ```
 
-Expected services:
+預期會看到：
 
 ```text
 postgres   healthy
@@ -115,67 +106,67 @@ odc        running
 frontend   running
 ```
 
-Check the frontend API:
+檢查 frontend API：
 
 ```bash
 curl http://localhost:8000/api/config
 ```
 
-On PowerShell:
+PowerShell 可以使用：
 
 ```powershell
 Invoke-WebRequest -UseBasicParsing http://localhost:8000/api/config
 ```
 
-## Open Web Map Demo
+## 開啟網頁地圖
 
-Open:
+在瀏覽器開啟：
 
 ```text
 http://localhost:8000
 ```
 
-The web map includes:
+網頁地圖包含：
 
-- Leaflet map with OpenStreetMap basemap
-- Year selector based on files in `data/`
-- Land-cover class filters
-- PNG overlay rendered from ODC data
-- Area summary endpoint
-- Fixed Greater Taipei bounding box
+- Leaflet 地圖與 OpenStreetMap 底圖
+- 根據 `data/` 內檔案產生的年份選單
+- 土地覆蓋類別篩選
+- 由 ODC 資料產生的 PNG overlay
+- 面積統計 API
+- 固定的大台北範圍 bounding box
 
-## Open Jupyter
+## 開啟 Jupyter
 
-Start Jupyter Lab inside the `odc` container:
+在 `odc` container 內啟動 Jupyter Lab：
 
 ```bash
 docker compose exec odc jupyter lab --ip=0.0.0.0 --port=8888 --allow-root --no-browser
 ```
 
-Then open the URL printed by Jupyter. The container exposes port `8888`.
+接著打開 Jupyter 印出的網址。container 對外使用 port `8888`。
 
-The external `../notebooks` directory is mounted at:
+外部的 `../notebooks` 目錄會掛載到 container 內：
 
 ```text
 /workspace/notebooks
 ```
 
-## Data Assumptions
+## 資料假設
 
-- Product name: `s2_landcover_taiwan`
-- Measurement name: `classification`
-- Measurement aliases: `land_cover`, `lulc`
-- Data type: `uint8`
-- NoData: `0`
-- Units: `1`
-- CRS is read from each GeoTIFF
-- Current Taiwan sample data is expected around `EPSG:32651`
-- Dataset time range is parsed from the filename
-- Region code is parsed from the filename label, for example `51R`
-- Pixel values are categorical class codes
-- Use nearest-neighbor resampling for these rasters
+- Product name：`s2_landcover_taiwan`
+- Measurement name：`classification`
+- Measurement aliases：`land_cover`, `lulc`
+- Data type：`uint8`
+- NoData：`0`
+- Units：`1`
+- CRS 會從各 GeoTIFF 讀取
+- 目前台灣 sample data 預期約為 `EPSG:32651`
+- Dataset time range 由檔名解析
+- Region code 由檔名前段 label 解析，例如 `51R`
+- Pixel value 是分類代碼，不是連續光譜值
+- 這類分類 raster 重新投影或對齊時應使用 nearest-neighbor resampling
 
-Common class codes in the current data:
+目前資料常見分類代碼：
 
 ```text
 0  NoData
@@ -190,32 +181,25 @@ Common class codes in the current data:
 11 Rangeland
 ```
 
-## Rebuild ODC Index
+## 重新建立 ODC 索引
 
-Use this when you changed files in `data/`, changed the product definition, or
-changed `scripts/write_dataset_yaml.py`, but want to keep the existing Docker
-containers and PostgreSQL volume.
+如果你更換了 `data/` 內的 GeoTIFF、修改 product definition，或修改 `scripts/write_dataset_yaml.py`，但想保留現有 container 與 PostgreSQL volume，可以執行：
 
 ```bash
 docker compose exec odc bash /workspace/scripts/reset_odc_demo.sh
 docker compose exec odc python /workspace/scripts/check_odc_demo.py
 ```
 
-From Git Bash on Windows:
+Windows Git Bash：
 
 ```bash
 MSYS_NO_PATHCONV=1 docker compose exec odc bash /workspace/scripts/reset_odc_demo.sh
 MSYS_NO_PATHCONV=1 docker compose exec odc python /workspace/scripts/check_odc_demo.py
 ```
 
-## Full Reset
+## 完全重設
 
-Use this when you want to remove the demo PostgreSQL volume and recreate the ODC
-database from scratch.
-
-This deletes the indexed ODC database only. It does not delete your GeoTIFF
-files, product YAML, scripts, frontend, generated dataset YAML files, or
-notebooks.
+如果你想刪除 demo 的 PostgreSQL volume，並從零重建 ODC database：
 
 ```bash
 docker compose down -v
@@ -224,46 +208,45 @@ docker compose exec odc bash /workspace/scripts/setup_odc_demo.sh
 docker compose exec odc python /workspace/scripts/check_odc_demo.py
 ```
 
-## Stop The Demo
+這只會刪除已索引的 ODC database volume，不會刪除你的 GeoTIFF、product YAML、scripts、frontend、產生出的 dataset YAML 或 notebooks。
 
-Stop containers but keep the PostgreSQL volume:
+## 結束 demo
+
+停止 containers，但保留 PostgreSQL volume：
 
 ```bash
 docker compose down
 ```
 
-Stop containers and delete the PostgreSQL volume:
+停止 containers，並刪除 PostgreSQL volume：
 
 ```bash
 docker compose down -v
 ```
 
-## Troubleshooting
+一般只是暫時不用時，使用 `docker compose down` 即可。
+下次再用 `docker compose up -d` 啟動。
+
+## 常見問題
 
 ### Docker Hub CloudFront EOF
 
-If Docker prints an error similar to this:
+如果 Docker 出現類似錯誤：
 
 ```text
 failed to copy: httpReadSeeker: failed open: failed to do request ... CloudFront ... EOF
 ```
 
-This is a network interruption while Docker is downloading an image layer. Retry:
+這通常是 Docker 下載 image layer 時網路中斷。可以重試：
 
 ```bash
 docker compose up -d --build
 ```
+。
 
-This project avoids pulling the official `postgres` image, but Docker may still
-need to pull `python:3.11-slim` the first time.
+### Docker Desktop 尚未啟動
 
-### Docker Desktop Is Not Running
-
-If Docker prints an error about `docker_engine`, `dockerDesktopLinuxEngine`, or a
-missing pipe, start Docker Desktop and wait until it reports that the engine is
-running.
-
-Then retry:
+如果 Docker 出現 `docker_engine`、`dockerDesktopLinuxEngine` 或找不到 pipe 的錯誤，請先啟動 Docker Desktop，等待 engine 完成啟動後再執行：
 
 ```bash
 docker compose up -d --build
@@ -271,24 +254,23 @@ docker compose up -d --build
 
 ### PowerShell Profile Warning
 
-If you see:
+如果看到：
 
 ```text
 profile.ps1 cannot be loaded because running scripts is disabled
 ```
 
-That warning comes from the local PowerShell execution policy. It does not
-prevent Docker containers from running. You can ignore it for this demo.
+這是本機 PowerShell execution policy 的警告，不會阻止 Docker container 執行。此 demo 可以忽略這個警告。
 
-### No Datasets Indexed
+### 沒有 dataset 被索引
 
-Confirm that `data/` contains files matching:
+請確認 `data/` 內有符合以下格式的檔案：
 
 ```text
 <label>_YYYYMMDD-YYYYMMDD.tif
 ```
 
-Then rebuild the index:
+然後重新建立索引：
 
 ```bash
 docker compose exec odc bash /workspace/scripts/reset_odc_demo.sh

@@ -1,110 +1,166 @@
-# GEE Code Editor Tutorial: VIIRS Night Lights over Taiwan
+# GEE Code Editor 教學：台灣 VIIRS 夜間燈光
 
-This tutorial shows how to reproduce the GEE notebook example in the official
-Google Earth Engine Code Editor using JavaScript.
+這份教學示範如何在 Google Earth Engine 官方 Code Editor 平台，用
+JavaScript 重現 notebook 中的 VIIRS 夜間燈光範例。
 
-本教學說明如何於 Google Earth Engine 官方 Code Editor（網頁介面）中，
-以 JavaScript 重現 GEE notebook（[`GEE/GEE.ipynb`](../GEE.ipynb)）之夜間燈光範例。
-Code Editor 為 GEE 之原生開發介面，無須安裝任何環境，適合快速試驗與參數調整；
-Python notebook 版本則適合與其他資料處理流程整合。兩者呼叫相同之後端運算。
-
-Code file:
+範例程式碼：
 
 ```text
 01_viirs_night_lights_taiwan.js
 ```
 
-## 1. Open GEE Code Editor
+本範例會讀取 2023 年的 VIIRS monthly night lights 資料，計算台灣區域的年度平均夜間燈光，並在地圖上顯示結果。
 
-Go to:
+## 1. 開啟 GEE Code Editor
+
+進入 Google Earth Engine Code Editor：
 
 ```text
-https://code.earthengine.google.com/
+https://code.earthengine.google.com/b7e3a1999822da32ab31169fb049dc20
 ```
 
-Sign in with an account that has Earth Engine access.
+請使用已啟用 Earth Engine 權限的 Google 帳號登入。
 
-以具備 Earth Engine 存取權限之 Google 帳號登入
-（申請方式參見 [`GEE/GEE.ipynb`](../GEE.ipynb) 之認證章節）。
+如果是第一次使用，可能會看到 Google Earth Engine 的歡迎畫面。一般教學或非商業用途可依照帳號狀態選擇註冊新專案，或選擇已授權的 Cloud Project。
 
-## 2. Create a New Script
+![Google Earth Engine 初始畫面](image-5.png)
 
-In the left panel, create a new script and give it a name such as:
+第一次進入或切換 workspace 時，系統可能會要求選擇 Cloud Project。選擇你要綁定的專案後，按下 `SELECT`。
+
+![選擇 Cloud Project](image.png)
+
+## 2. 認識 Code Editor 介面
+
+進入 Code Editor 後，畫面主要分成四個區域：
+
+1. 左側 `Scripts / Docs / Assets`：管理 script、查文件、查看 assets。
+2. 中間上方程式碼區：貼上或撰寫 JavaScript。
+3. 右側 `Inspector / Console / Tasks`：查看點位資訊、print 輸出、匯出任務。
+4. 下方地圖區：顯示分析結果和圖層。
+
+![Code Editor 主畫面](image-1.png)
+
+## 3. 最簡化方法：直接開啟範例 Script
+
+如果只是要最快開始使用，可以直接打開以下連結：
+
+```text
+https://code.earthengine.google.com/b7e3a1999822da32ab31169fb049dc20
+```
+
+或直接點這裡：
+
+[開啟 GEE 範例 script](https://code.earthengine.google.com/b7e3a1999822da32ab31169fb049dc20)
+
+進入頁面後，會直接開啟範例 script。確認程式碼載入後，按上方 `Run` 即可執行。
+
+如果這個連結無法使用，或想手動練習 Code Editor 操作，再依照下一步建立新 script 並貼上程式碼。
+
+## 4. 建立新 Script
+
+在左側 `Scripts` 區域按 `NEW`，建立一個新的 script。可以命名為：
 
 ```text
 viirs_night_lights_taiwan
 ```
 
-於左側面板建立新腳本並命名。腳本儲存於 GEE 雲端之個人 repository，可隨時回存與分享。
+如果只是快速測試，也可以直接使用畫面中的 `New Script` 編輯區。
 
-## 3. Copy the JavaScript Code
+## 5. 貼上 JavaScript 程式碼
 
-Open `01_viirs_night_lights_taiwan.js`, copy all code, and paste it into the
-GEE Code Editor script panel.
+打開本資料夾中的：
 
-開啟 `01_viirs_night_lights_taiwan.js`，複製全部程式碼並貼入 Code Editor 之腳本面板。
+```text
+01_viirs_night_lights_taiwan.js
+```
 
-## 4. Run the Script
+複製全部內容，貼到 Code Editor 中間的程式碼區。
 
-Click `Run`.
+![貼上 JavaScript 程式碼](image-2.png)
 
-The map should center on Taiwan and show the 2023 annual mean VIIRS night lights.
-Brighter areas correspond to higher nighttime radiance.
+## 6. 執行程式
 
-點擊 `Run` 後，地圖將置中於台灣並顯示 2023 年 VIIRS 夜間燈光之年平均影像；
-亮度愈高代表夜間輻射值愈大。所有運算均於 Google 伺服器端執行，
-本地瀏覽器僅接收渲染後之圖磚。
+按上方工具列的 `Run`。
 
-## 5. Main Steps in the Code
+程式會執行以下流程：
 
-The script follows the same workflow as the notebook:
+1. 定義台灣的研究範圍 `roi`。
+2. 載入 VIIRS monthly night lights 影像集合。
+3. 篩選 2023 年資料。
+4. 選擇 `avg_rad` 夜間燈光亮度波段。
+5. 計算年度平均影像。
+6. 過濾低亮度像素。
+7. 將結果加入地圖。
+8. 在 Console 印出資料資訊。
 
-1. Define a Taiwan region of interest.
-2. Load the VIIRS monthly night lights ImageCollection.
-3. Filter the collection by region and date.
-4. Select the `avg_rad` band.
-5. Compute the 2023 annual mean image.
-6. Mask pixels with very low radiance.
-7. Add the result to the map.
-8. Optionally export the raster to Google Drive.
+## 7. 查看 Console 輸出
 
-腳本流程與 notebook 版本一致：定義台灣範圍框（ROI）→ 載入 VIIRS 月合成
-夜間燈光影像集合 → 依空間與時間篩選 → 選取 `avg_rad`（平均輻射亮度）波段
-→ 計算 2023 年平均影像（降低單月雲層與雜訊之影響）→ 遮罩低輻射值區域
-→ 疊加至地圖，並可選擇性匯出至 Google Drive。
+執行後，右側切到 `Console`。你應該會看到兩個輸出：
 
-## 6. Change the Parameters
+- `VIIRS collection after filtering`：篩選後的 VIIRS ImageCollection。
+- `Annual mean night lights image`：年度平均後的單張影像。
 
-To analyze another year, update:
+這可以用來確認資料集、時間範圍和波段是否正確。
+
+![Console 輸出結果](image-3.png)
+
+## 8. 查看地圖結果
+
+地圖會自動移動到台灣附近，並顯示 2023 年平均夜間燈光。
+
+顏色越亮，代表夜間燈光強度越高。通常可以看到西部都會區、主要城市、港口和交通廊帶比較明顯。
+
+![台灣 VIIRS 夜間燈光結果](image-4.png)
+
+## 9. 調整分析年份
+
+如果要分析其他年份，修改程式碼中的日期：
 
 ```js
 var startDate = '2023-01-01';
 var endDate = '2024-01-01';
 ```
 
-To change the visible brightness range, update:
+例如分析 2022 年：
 
 ```js
-min: 1,
-max: 60
+var startDate = '2022-01-01';
+var endDate = '2023-01-01';
 ```
 
-To make the mask stricter or looser, update:
+注意：GEE 的 `filterDate(start, end)` 會包含 start date，但不包含 end date。
+
+## 10. 調整亮度顯示
+
+如果畫面太暗或太亮，可以調整 visualization 參數：
+
+```js
+var nightLightsVis = {
+  min: 1,
+  max: 60,
+  palette: ['050505', '4d2600', 'b35900', 'ff9900', 'ffdb4d', 'ffffff']
+};
+```
+
+常見調整方式：
+
+- 降低 `max`：讓較暗的地方更明顯。
+- 提高 `max`：避免高亮度城市區域過度飽和。
+- 調整 `palette`：改變地圖顏色。
+
+## 11. 調整低亮度遮罩
+
+程式中使用以下條件過濾低亮度像素：
 
 ```js
 var lightMask = annualMean.gt(0.1);
 ```
 
-參數調整說明：`startDate`／`endDate` 控制分析年度（`filterDate` 之結束日期為
-排除式）；`min`／`max` 控制視覺化之亮度範圍；`gt(0.1)` 之門檻值控制遮罩之
-嚴格程度——調高門檻僅保留較亮之區域。
+如果想只保留更亮的區域，可以把 `0.1` 調高，例如：
 
-## 7. Export Result
+```js
+var lightMask = annualMean.gt(1);
+```
 
-The export block is included but commented out. To export the image, remove the
-comment markers around `Export.image.toDrive(...)`, run the script, then start
-the task from the `Tasks` tab.
+如果想看到更多微弱燈光，可以把門檻調低。
 
-匯出區塊預設為註解狀態。如需匯出影像，取消 `Export.image.toDrive(...)` 周圍之
-註解後重新執行，並於右側 `Tasks` 分頁啟動匯出工作；完成後檔案將出現於
-Google Drive。
