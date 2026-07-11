@@ -21,6 +21,10 @@ https://code.earthengine.google.com/
 
 請使用已啟用 Earth Engine 權限的 Google 帳號登入。
 
+如果是第一次使用，可能會看到 Google Earth Engine 的歡迎畫面。一般教學或非商業用途可依照帳號狀態選擇註冊新專案，或選擇已授權的 Cloud Project。
+
+![Google Earth Engine 初始畫面](image-5.png)
+
 第一次進入或切換 workspace 時，系統可能會要求選擇 Cloud Project。選擇你要綁定的專案後，按下 `SELECT`。
 
 ![選擇 Cloud Project](image.png)
@@ -36,7 +40,23 @@ https://code.earthengine.google.com/
 
 ![Code Editor 主畫面](image-1.png)
 
-## 3. 建立新 Script
+## 3. 最簡化方法：直接接受 GEE Repo
+
+如果只是要最快開始使用，可以直接打開以下連結：
+
+```text
+https://code.earthengine.google.com/?accept_repo=users/chenj6677/GEE
+```
+
+或直接點這裡：
+
+[開啟並接受 GEE repo](https://code.earthengine.google.com/?accept_repo=users/chenj6677/GEE)
+
+進入頁面後，依照 GEE 畫面提示接受 repo。完成後，左側 `Scripts` 區域會出現 `users/chenj6677/GEE`，接著打開範例 script，按上方 `Run` 即可執行。
+
+如果這個連結無法使用，或想手動練習 Code Editor 操作，再依照下一步建立新 script 並貼上程式碼。
+
+## 4. 建立新 Script
 
 在左側 `Scripts` 區域按 `NEW`，建立一個新的 script。可以命名為：
 
@@ -46,7 +66,7 @@ viirs_night_lights_taiwan
 
 如果只是快速測試，也可以直接使用畫面中的 `New Script` 編輯區。
 
-## 4. 貼上 JavaScript 程式碼
+## 5. 貼上 JavaScript 程式碼
 
 打開本資料夾中的：
 
@@ -58,7 +78,7 @@ viirs_night_lights_taiwan
 
 ![貼上 JavaScript 程式碼](image-2.png)
 
-## 5. 執行程式
+## 6. 執行程式
 
 按上方工具列的 `Run`。
 
@@ -73,7 +93,7 @@ viirs_night_lights_taiwan
 7. 將結果加入地圖。
 8. 在 Console 印出資料資訊。
 
-## 6. 查看 Console 輸出
+## 7. 查看 Console 輸出
 
 執行後，右側切到 `Console`。你應該會看到兩個輸出：
 
@@ -84,7 +104,7 @@ viirs_night_lights_taiwan
 
 ![Console 輸出結果](image-3.png)
 
-## 7. 查看地圖結果
+## 8. 查看地圖結果
 
 地圖會自動移動到台灣附近，並顯示 2023 年平均夜間燈光。
 
@@ -92,7 +112,7 @@ viirs_night_lights_taiwan
 
 ![台灣 VIIRS 夜間燈光結果](image-4.png)
 
-## 8. 調整分析年份
+## 9. 調整分析年份
 
 如果要分析其他年份，修改程式碼中的日期：
 
@@ -110,7 +130,7 @@ var endDate = '2023-01-01';
 
 注意：GEE 的 `filterDate(start, end)` 會包含 start date，但不包含 end date。
 
-## 9. 調整亮度顯示
+## 10. 調整亮度顯示
 
 如果畫面太暗或太亮，可以調整 visualization 參數：
 
@@ -128,7 +148,7 @@ var nightLightsVis = {
 - 提高 `max`：避免高亮度城市區域過度飽和。
 - 調整 `palette`：改變地圖顏色。
 
-## 10. 調整低亮度遮罩
+## 11. 調整低亮度遮罩
 
 程式中使用以下條件過濾低亮度像素：
 
@@ -144,3 +164,4 @@ var lightMask = annualMean.gt(1);
 
 如果想看到更多微弱燈光，可以把門檻調低。
 
+![初始畫面](image-5.png)
